@@ -1,0 +1,24 @@
+.main-content {
+  //   margin-left: 240px;
+  height: 100%;
+  display: flex;
+  //   min-height: 0;
+  min-height: calc(100vh - 56px) !important;
+  flex-direction: column;
+  //   flex-grow: 1;
+  flex-shrink: 0;
+  @media screen and (max-width: 600px) {
+    margin-left: 0px;
+  }
+}
+
+.page-content-wrapper {
+  margin: 10px 15px;
+}
+
+.next-row {
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  width: 100%;
+}

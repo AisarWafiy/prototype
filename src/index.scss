@@ -1,0 +1,30 @@
+/* body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+} */
+
+$primary: #060b71;
+$secondary: #9ab6da;
+$dark: #386086;
+$light: #f2efee;
+$success: #66ab57;
+$info: #9ab6da;
+$warning: #e49b1f;
+$danger: #f44336;
+
+@import "~bootstrap/scss/bootstrap";
+@import "./assets/styles/login.scss";
+@import "./assets//styles/navbar.scss";
+@import "./assets//styles/sidebar.scss";
+@import "./assets//styles/layout.scss";
+@import "./assets//styles/card.scss";
+@import "./assets//styles/table.scss";
