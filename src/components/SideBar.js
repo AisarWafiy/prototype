@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Col, ListGroup, Nav, Row, Tab } from "react-bootstrap";
 import { useHistory, useLocation, withRouter } from "react-router";
+import { faCaretRight, faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Side = (props) => {
   const [selectedKey, setSelectedKey] = useState("/");
@@ -10,6 +12,13 @@ const Side = (props) => {
 
   console.log("history", history);
   console.log("location", location);
+
+  const [clicked, setClicked] = useState(false);
+
+  function clickEvent(e) {
+    e.preventDefault();
+    setClicked(!clicked);
+  }
 
   const menuList = [
     {
@@ -29,6 +38,73 @@ const Side = (props) => {
       value: 2,
       path: "/exercise-parameters",
       key: "/exercise-parameters",
+      icon: <FontAwesomeIcon icon={faCaretRight} />,
+      iconOpen: <FontAwesomeIcon icon={faCaretDown} />,
+      children: [
+        {
+          title: "Exercise Parameters",
+          value: 1,
+          path: "/exercise-parameters1",
+          key: "/exercise-parameters1",
+          icon: <FontAwesomeIcon icon={faCaretDown} />,
+        },
+        {
+          title: "Vehicle Category Parameters",
+          value: 2,
+          path: "/vehicle-category",
+          key: "/vehicle-category",
+          icon: <FontAwesomeIcon icon={faCaretDown} />,
+        },
+        {
+          title: "Bank Parameters",
+          value: 3,
+          path: "/bank-parameters",
+          key: "/bank-parameters",
+          icon: <FontAwesomeIcon icon={faCaretDown} />,
+        },
+        {
+          title: "Company Parameters",
+          value: 4,
+          path: "/company-parameters",
+          key: "/company-parameters",
+          icon: <FontAwesomeIcon icon={faCaretRight} />,
+          children: [
+            {
+              title: "Address Profile",
+              value: 4,
+              path: "/address-profile",
+              key: "/address-profile",
+              icon: <FontAwesomeIcon icon={faCaretRight} />,
+              children: [
+                {
+                  title: "Create",
+                  value: 1,
+                  path: "/create",
+                  key: "/create",
+                },
+                {
+                  title: "Edit",
+                  value: 2,
+                  path: "/edit",
+                  key: "/edit",
+                },
+                {
+                  title: "Delete",
+                  value: 3,
+                  path: "/delete",
+                  key: "/delete",
+                },
+                {
+                  title: "Activate",
+                  value: 4,
+                  path: "/activate",
+                  key: "/activate",
+                },
+              ],
+            },
+          ],
+        },
+      ],
     },
     {
       title: "Enquire Bid Status",
@@ -106,8 +182,43 @@ const Side = (props) => {
           {menuList.map((el, index) => (
             <Nav.Item key={el.value}>
               <Nav.Link href={el.path} eventKey={el.key} className="text-white">
-                {el.title}
+                <div className="d-flex">
+                  <div
+                    style={{ paddingRight: "5px" }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setClicked(!clicked);
+                    }}
+                  >
+                    {clicked ? el.iconOpen : el.icon}
+                    {""}
+                  </div>
+                  <div>{el.title}</div>
+                </div>
               </Nav.Link>
+              {el.children?.map((el, index) => {
+                {
+                  if (clicked) {
+                    return (
+                      <Nav.Link
+                        href={el.path}
+                        eventKey={el.key}
+                        className="text-white  d-block"
+                      >
+                        <div className="d-flex">
+                          <div
+                            style={{ paddingRight: "5px", paddingLeft: "30px" }}
+                          >
+                            {el.icon}
+                            {""}
+                          </div>
+                          <div>{el.title}</div>
+                        </div>
+                      </Nav.Link>
+                    );
+                  }
+                }
+              })}
             </Nav.Item>
           ))}
 
