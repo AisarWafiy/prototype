@@ -12,19 +12,20 @@ code {
     monospace;
 } */
 
-$primary: #060b71;
-$secondary: #9ab6da;
-$dark: #386086;
-$light: #f2efee;
-$success: #66ab57;
-$info: #9ab6da;
-$warning: #e49b1f;
-$danger: #f44336;
-
+// $primary: #060b71;
+// $secondary: #9ab6da;
+// $dark: #386086;
+// $light: #f2efee;
+// $success: #66ab57;
+// $info: #9ab6da;
+// $warning: #e49b1f;
+// $danger: #f44336;
+@import "./assets/styles/theme.scss";
 @import "~bootstrap/scss/bootstrap";
 @import "./assets/styles/login.scss";
-@import "./assets//styles/navbar.scss";
-@import "./assets//styles/sidebar.scss";
-@import "./assets//styles/layout.scss";
-@import "./assets//styles/card.scss";
-@import "./assets//styles/table.scss";
+@import "./assets/styles/navbar.scss";
+@import "./assets/styles/sidebar.scss";
+@import "./assets/styles/layout.scss";
+@import "./assets/styles/card.scss";
+@import "./assets/styles/table.scss";
+@import "./assets/styles/fileupload.scss";

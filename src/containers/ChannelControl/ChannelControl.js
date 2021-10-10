@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CustomTable } from "../../components/CustomTable/CustomTable";
+import { Loading } from "../../components/Loading";
 import { StandardTable } from "../../components/StandardTable";
 
 const ChannelControl = () => {
@@ -24,9 +25,24 @@ const ChannelControl = () => {
       Released: "1/01/2021",
     },
   ];
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const getData = () => {
+      fetch("https://jsonplaceholder.typicode.com/comments?_limit=100")
+        .then((response) => response.json())
+        .then((json) => {
+          setData(json);
+
+          console.log(json);
+        });
+    };
+    getData();
+  }, []);
 
   return (
     <>
+      {/* <Loading /> */}
       <div className="page-content-wrapper">
         <span>Channel Status Control </span>
         {/* <StandardTable
@@ -51,7 +67,7 @@ const ChannelControl = () => {
           //     </>
           //   )}
         /> */}
-        <CustomTable />
+        <CustomTable results={data} />
       </div>
     </>
   );

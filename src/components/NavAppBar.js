@@ -6,7 +6,7 @@ export const NavAppBar = () => {
     <>
       <Navbar collapseOnSelect expand="lg" variant="dark" className="navbar">
         <Container>
-          <Navbar.Brand href="#home">Testing</Navbar.Brand>
+          <Navbar.Brand href="#home">UOB Bank Admin</Navbar.Brand>
           {/* <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">

@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import CardContent from "../../components/CardContent";
+import { MultipleFileUpload } from "../../components/FileUpload/MultipleFileUpload";
+import { StandardModal } from "../../components/StandardModal";
 
 const ExerciseControl = () => {
+  const [modalShow, setModalShow] = useState(false);
+
   return (
     <>
       <div className="page-content-wrapper">
         <span>Exercise Status Control </span>{" "}
-        <CardContent
+        {/* <CardContent
           title="Current Exercise Status Details"
           subtitle="Exercise 1"
           footer
@@ -43,14 +47,26 @@ const ExerciseControl = () => {
           <div className="">
             <span>Exercise Status Control </span>{" "}
           </div>
-        </CardContent>
-        <Button
-          variant="primary"
-          className="ml-1"
-          onClick={() => alert("testt")}
-          style={{ minWidth: "4rem" }}
+        </CardContent> */}
+        <StandardModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          onClose={() => setModalShow(false)}
+          title={"Upload Files"}
+          footerBtn={[
+            { label: "Upload", onClick: () => setModalShow(false) },
+            {
+              label: "Close",
+              onClick: () => {
+                setModalShow(false);
+              },
+            },
+          ]}
         >
-          Test
+          <MultipleFileUpload />
+        </StandardModal>
+        <Button variant="primary" onClick={() => setModalShow(true)}>
+          Upload File
         </Button>
       </div>
     </>

@@ -1,121 +1,221 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Button, Pagination, Table } from "react-bootstrap";
+import { Button, Form, Pagination, Table } from "react-bootstrap";
+import { useSortableData } from "../../containers/helpers/hooks/useSortableData";
+import { TableHeader } from "./TableHeader";
 import { TablePagination } from "./TablePagination";
+import { faEdit, faSlidersH, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useForm, useFieldArray, Controller, useWatch } from "react-hook-form";
 
 export const CustomTable = (props) => {
-  const { headers, rowData, tableContent, onClick, contentStyle } = props;
+  const { results, resultItems } = props;
 
-  const dummyData = [
+  const headersData = [
     {
-      ID: "1",
-      Name: "Test 1",
-      Author: "Dummy 1 ",
-      Released: "24/02/2021",
+      name: "IDs",
+      field: "id",
+      sortable: true,
     },
     {
-      ID: "2",
-      Name: "Test 2",
-      Author: "Dummy 2",
-      Released: "5/02/2021",
+      name: "Name",
+      field: "name",
+      sortable: true,
     },
     {
-      ID: "3",
-      Name: "Test 3",
-      Author: "Dummy 3",
-      Released: "1/01/2021",
+      name: "Email",
+      field: "email",
+      sortable: true,
+    },
+    {
+      name: "Body",
+      field: "body",
+      sortable: false,
+    },
+    {
+      name: "Action",
+      field: "action",
+      sortable: false,
     },
   ];
 
-  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
+  // const [totalItems, setTotalItems] = useState(0);
+  // const [sortData, setSortData] = useState({ field: "", order: "" });
+  const [isEdit, setIsEdit] = useState(false);
+  const [currentIdx, setCurrentIdx] = useState(null);
 
-  const ITEMS_PER_PAGE = 50;
+  const [content, setContent] = useState([]);
+
+  // const ITEMS_PER_PAGE = itemsPerPage;
+
+  const {
+    items,
+    requestSort,
+    totalItemsPerPage,
+    totalItems,
+    handleClickPage,
+    handlePerPage,
+  } = useSortableData(results);
+
   // const [ loader, showLoader, hideLoader ]
 
+  const handleEditMode = (value, index) => {
+    setIsEdit(value);
+    setCurrentIdx(index);
+    console.log("index----", index);
+  };
+
+  const handleClickMode = () => {
+    setIsEdit(false);
+    setCurrentIdx(null);
+  };
+  // const { fields, append, prepend } = useFieldArray({
+  //   name: "test",
+  // });
+  console.log("---isEdit", isEdit);
+  // const currentlyEditing = currentIdx === i;
+
   useEffect(() => {
-    const getData = () => {
-      fetch("https://jsonplaceholder.typicode.com/comments")
-        .then((response) => response.json())
-        .then((json) => {
-          setData(json);
+    setContent(items);
+  }, [items, content]);
 
-          console.log(json);
-        });
-    };
-    getData();
-  }, []);
-
-  const resultData = useMemo(() => {
-    let computeData = data;
-
-    setTotalItems(computeData.length);
-    return computeData.slice(
-      (currentPage - 1) * ITEMS_PER_PAGE,
-      (currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
-    );
-  }, [data, currentPage]);
-
-  console.log("currentPage", currentPage);
   return (
     <>
-      <TablePagination
-        total={totalItems}
-        itemsPerPage={ITEMS_PER_PAGE}
-        currentPage={currentPage}
-        onPageChange={(page) => setCurrentPage(page)}
-      />
-      <Table responsive bordered size="sm" className="table-container">
-        <thead className="table-header">
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Author</th>
-            <th>Released</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* {data?.map((el, index) => (
-            <>
-              <tr>
-                <td>{el?.ID}</td>
-                <td>{el?.Name}</td>
-                <td>{el?.Author}</td>
-                <td className="">
-                  <div className="flex justify-center">
-                    <span className="flex-end"> {el?.Released} </span>
-                  </div>
+      <form>
+        <Table
+          responsive
+          striped
+          bordered
+          size="sm"
+          className="table-container"
+          style={{ overflowX: "hidden" }}
+        >
+          <TableHeader
+            headers={headersData}
+            // onSorting={(field, order) => setSortData({ field, order })}
+            onSorting={(field, order) => requestSort(field)}
+          />
+
+          <tbody>
+            {content.map((data, index) => (
+              <tr key={index}>
+                {currentIdx != index ? (
+                  <>
+                    <td
+                      className="align-middle"
+                      style={{ minWidth: "60px", textAlign: "center" }}
+                    >
+                      {data.id}
+                    </td>
+                    <td className="align-middle">{data.name}</td>
+                    <td className="align-middle">{data.email}</td>
+                    <td className="align-middle">{data.body}</td>
+                  </>
+                ) : (
+                  <>
+                    <td
+                      className="align-middle"
+                      style={{ minWidth: "60px", textAlign: "center" }}
+                    >
+                      <Form.Control
+                        required
+                        type="text"
+                        defaultValue={data.id}
+                        onChange={(e) => console.log(e.target.value)}
+                        disabled
+                      />
+                    </td>
+                    <td className="align-middle">
+                      <Form.Control
+                        required
+                        type="text"
+                        defaultValue={data.name}
+                        onChange={(e) => console.log(e.target.value)}
+                      />
+                    </td>
+                    <td className="align-middle">
+                      <Form.Control
+                        required
+                        type="text"
+                        defaultValue={data.email}
+                        onChange={(e) => console.log(e.target.value)}
+                      />
+                    </td>
+                    <td className="align-middle">
+                      <Form.Control
+                        required
+                        type="text"
+                        defaultValue={data.body}
+                        onChange={(e) => console.log(e.target.value)}
+                      />
+                    </td>
+                  </>
+                )}
+
+                <td
+                  className="align-middle "
+                  style={{ minWidth: "100px", textAlign: "center" }}
+                >
+                  {currentIdx != index && (
+                    <>
+                      <FontAwesomeIcon
+                        className="  "
+                        icon={faEdit}
+                        onClick={() => handleEditMode(true, index)}
+                        color="gray"
+                      />
+                      <FontAwesomeIcon
+                        className=" ml-1"
+                        icon={faTrash}
+                        onClick={() => alert("deleted")}
+                        color="red"
+                      />
+                    </>
+                  )}
+
+                  {currentIdx === index && (
+                    <>
+                      <Button
+                        variant="primary"
+                        className="ml-1"
+                        onClick={() => handleClickMode()}
+                        disabled={false}
+                        style={{ minWidth: "2rem" }}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        variant="primary"
+                        className="ml-1"
+                        onClick={() => handleClickMode()}
+                        disabled={false}
+                        style={{ minWidth: "2rem" }}
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  )}
                 </td>
               </tr>
-            </>
-          ))} */}
-
-          {resultData.map((data, index) => (
-            <tr>
-              <td>{data.id} </td>
-              <td>{data.name} </td>
-              <td>{data.email} </td>
-            </tr>
-          ))}
-          {/* <tr>
-            <td>1</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td colSpan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr> */}
-        </tbody>
-      </Table>
+            ))}
+          </tbody>
+        </Table>
+      </form>
+      <div className="my-4">
+        <TablePagination
+          total={totalItems}
+          itemsPerPage={totalItemsPerPage}
+          currentPage={currentPage}
+          pageRows={items}
+          onPerPageChange={(el) => {
+            handlePerPage(el);
+          }}
+          onPageChange={(el) => {
+            setCurrentPage(el);
+            handleClickPage(el);
+          }}
+        />
+      </div>
     </>
   );
 };
